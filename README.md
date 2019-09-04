@@ -9,7 +9,7 @@
 
 </h1>
 
-<p align="center" style="font-size: 1.2rem;"> 
+<p align="center" style="font-size: 1.2rem;">
     Terraform module to connect two VPC’s from different AWS account.
      </p>
 
@@ -40,7 +40,7 @@
 <hr>
 
 
-We eat, drink, sleep and most importantly love **DevOps**. We are working towards stratergies for standardizing architecture while ensuring security for the infrastructure. We are strong believer of the philosophy <b>Bigger problems are always solved by breaking them into smaller manageable problems</b>. Resonating with microservices architecture, it is considered best-practice to run database, cluster, storage in smaller <b>connected yet manageable pieces</b> within the infrastructure. 
+We eat, drink, sleep and most importantly love **DevOps**. We are working towards stratergies for standardizing architecture while ensuring security for the infrastructure. We are strong believer of the philosophy <b>Bigger problems are always solved by breaking them into smaller manageable problems</b>. Resonating with microservices architecture, it is considered best-practice to run database, cluster, storage in smaller <b>connected yet manageable pieces</b> within the infrastructure.
 
 This module is basically combination of [Terraform open source](https://www.terraform.io/) and includes automatation tests and examples. It also helps to create and improve your infrastructure with minimalistic code instead of maintaining the whole infrastructure code yourself.
 
@@ -51,7 +51,7 @@ We have [*fifty plus terraform modules*][terraform_modules]. A few of them are c
 
 ## Prerequisites
 
-This module has a few dependencies: 
+This module has a few dependencies:
 
 - [Terraform 0.12](https://learn.hashicorp.com/terraform/getting-started/install.html)
 - [Go](https://golang.org/doc/install)
@@ -70,8 +70,8 @@ This module has a few dependencies:
 **IMPORTANT:** Since the `master` branch used in `source` varies based on new modifications, we suggest that you use the release versions [here](https://github.com/terraform-aws-multi-account-peering/releases).
 
 
-### Simple Example
-Here is an example of how you can use this module in your inventory structure:
+Here are some examples of how you can use this module in your inventory structure:
+## With Profile Name
 ```hcl
   module "vpc-peering" {
         source = "git::https://github.com/clouddrove/terraform-aws-multi-account-peering.git"
@@ -79,11 +79,27 @@ Here is an example of how you can use this module in your inventory structure:
         application      = "clouddrove"
         environment      = "test"
         label_order      = ["environment", "name", "application"]
+        multi_peering    = true
         accepter_region  = "eu-west-1"
         accepter_profile = "clouddrove-prod"
         requestor_vpc_id = "vpc-XXXXXXXXXXXXXX"
         acceptor_vpc_id  = "vpc-XXXXXXXXXXXXXX"
        }
+```
+## With Account ID
+```hcl
+ module "vpc-peering" {
+        source = "git::https://github.com/clouddrove/terraform-aws-multi-account-peering.git"
+        name             = "vpc-peering"
+        application      = "clouddrove"
+        environment      = "test"
+        label_order      = ["environment", "name", "application"]
+        account_peering  = true
+        accepter_region  = "eu-west-1"
+        account_id       = "946079253026"
+        requestor_vpc_id = "vpc-0a34e67c9510d63f5"
+        acceptor_vpc_id  = "vpc-0c766fab50b176a43"
+      }
 ```
 
 
@@ -95,14 +111,16 @@ Here is an example of how you can use this module in your inventory structure:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| accepter_profile | Name of aws profile of acceptor vpc. | string | - | yes |
+| accepter_profile | Name of aws profile of acceptor vpc. | string | `` | no |
 | accepter_region | The region of acceptor vpc. | string | - | yes |
 | acceptor_allow_remote_vpc_dns_resolution | Allow acceptor VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the requestor VPC. | bool | `true` | no |
 | acceptor_vpc_id | Acceptor VPC ID. | string | - | yes |
+| account_id | Account ID of acceptor account | string | `` | no |
+| account_peering | Set to false to prevent the module from creating or accessing any resources. | bool | `false` | no |
 | application | Application (e.g. `cd` or `clouddrove`). | string | `` | no |
 | environment | Environment (e.g. `prod`, `dev`, `staging`). | string | `` | no |
 | label_order | Label order, e.g. `name`,`application`. | list | `<list>` | no |
-| multi_peering | Set to false to prevent the module from creating or accessing any resources. | bool | `true` | no |
+| multi_peering | Set to false to prevent the module from creating or accessing any resources. | bool | `false` | no |
 | name | Name  (e.g. `app` or `cluster`). | string | `` | no |
 | requestor_allow_remote_vpc_dns_resolution | Allow requestor VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the acceptor VPC. | bool | `true` | no |
 | requestor_vpc_id | Requestor VPC ID. | string | - | yes |
@@ -113,6 +131,7 @@ Here is an example of how you can use this module in your inventory structure:
 | Name | Description |
 |------|-------------|
 | accept_status | The status of the VPC peering connection request. |
+| account_accept_status | The status of the VPC peering connection request. |
 | connection_id | VPC peering connection ID. |
 | tags | A mapping of tags to assign to the resource. |
 
@@ -120,7 +139,7 @@ Here is an example of how you can use this module in your inventory structure:
 
 
 ## Testing
-In this module testing is performed with [terratest](https://github.com/gruntwork-io/terratest) and it creates a small piece of infrastructure, matches the output like ARN, ID and Tags name etc and destroy infrastructure in your AWS account. This testing is written in GO, so you need a [GO environment](https://golang.org/doc/install) in your system. 
+In this module testing is performed with [terratest](https://github.com/gruntwork-io/terratest) and it creates a small piece of infrastructure, matches the output like ARN, ID and Tags name etc and destroy infrastructure in your AWS account. This testing is written in GO, so you need a [GO environment](https://golang.org/doc/install) in your system.
 
 You need to run the following command in the testing folder:
 ```hcl
@@ -129,7 +148,7 @@ You need to run the following command in the testing folder:
 
 
 
-## Feedback 
+## Feedback
 If you come accross a bug or have any feedback, please log it in our [issue tracker](https://github.com/terraform-aws-multi-account-peering/issues), or feel free to drop us an email at [hello@clouddrove.com](mailto:hello@clouddrove.com).
 
 If you have found it worth your time, go ahead and give us a ★ on [our GitHub](https://github.com/terraform-aws-multi-account-peering)!

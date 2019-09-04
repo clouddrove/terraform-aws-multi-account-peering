@@ -3,8 +3,8 @@
 # Copyright @ CloudDrove. All Right Reserved.
 
 #Module      : Label
-#Description : This terraform module is designed to generate consistent label names and 
-#              tags for resources. You can use terraform-labels to implement a strict 
+#Description : This terraform module is designed to generate consistent label names and
+#              tags for resources. You can use terraform-labels to implement a strict
 #              naming convention.
 module "labels" {
   source = "git::https://github.com/clouddrove/terraform-labels.git"
@@ -157,4 +157,21 @@ resource "aws_route" "acceptor" {
     data.aws_route_table.acceptor,
     aws_vpc_peering_connection.default,
   ]
+}
+
+#Module      : VPC PEERING CONNECTION
+#Description : Terraform module to connect two VPC's on AWS With Account ID.
+resource "aws_vpc_peering_connection" "account" {
+  count         = var.account_peering == true ? 1 : 0
+  peer_owner_id = var.account_id
+  peer_region   = data.aws_region.peer.id
+  vpc_id        = var.requestor_vpc_id
+  peer_vpc_id   = var.acceptor_vpc_id
+  auto_accept   = false
+  tags = merge(
+    module.labels.tags,
+    {
+      "Name" = format("%s-%s", module.labels.application, module.labels.environment)
+    }
+  )
 }

@@ -9,6 +9,10 @@ output "accept_status" {
   value       = join("", aws_vpc_peering_connection.default.*.accept_status)
   description = "The status of the VPC peering connection request."
 }
+output "account_accept_status" {
+  value       = join("", aws_vpc_peering_connection.account.*.accept_status)
+  description = "The status of the VPC peering connection request."
+}
 
 output "tags" {
   value       = module.labels.tags

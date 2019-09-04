@@ -32,8 +32,8 @@ include:
 
 # How to use this project
 usage : |-
-  ### Simple Example
-  Here is an example of how you can use this module in your inventory structure:
+  Here are some examples of how you can use this module in your inventory structure:
+  ## With Profile Name
   ```hcl
     module "vpc-peering" {
           source = "git::https://github.com/clouddrove/terraform-aws-multi-account-peering.git"
@@ -41,9 +41,25 @@ usage : |-
           application      = "clouddrove"
           environment      = "test"
           label_order      = ["environment", "name", "application"]
+          multi_peering    = true
           accepter_region  = "eu-west-1"
           accepter_profile = "clouddrove-prod"
           requestor_vpc_id = "vpc-XXXXXXXXXXXXXX"
           acceptor_vpc_id  = "vpc-XXXXXXXXXXXXXX"
          }
+  ```
+  ## With Account ID
+  ```hcl
+   module "vpc-peering" {
+          source = "git::https://github.com/clouddrove/terraform-aws-multi-account-peering.git"
+          name             = "vpc-peering"
+          application      = "clouddrove"
+          environment      = "test"
+          label_order      = ["environment", "name", "application"]
+          account_peering  = true
+          accepter_region  = "eu-west-1"
+          account_id       = "946079253026"
+          requestor_vpc_id = "vpc-0a34e67c9510d63f5"
+          acceptor_vpc_id  = "vpc-0c766fab50b176a43"
+        }
   ```

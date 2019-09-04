@@ -15,7 +15,7 @@ func Test(t *testing.T) {
 	terraformOptions := &terraform.Options{
 
 		// Source path of Terraform directory.
-		TerraformDir: "../_example",
+		TerraformDir: "../../_example/with-account-id",
 		Upgrade: true,
 	}
 

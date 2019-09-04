@@ -38,12 +38,13 @@ variable "accepter_region" {
 }
 variable "accepter_profile" {
   type        = string
+  default     = null
   description = "Name of aws profile of acceptor vpc."
 }
 
 variable "multi_peering" {
   type        = bool
-  default     = true
+  default     = false
   description = "Set to false to prevent the module from creating or accessing any resources."
 }
 
@@ -67,4 +68,16 @@ variable "requestor_allow_remote_vpc_dns_resolution" {
   type        = bool
   default     = true
   description = "Allow requestor VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the acceptor VPC."
+}
+
+variable "account_peering" {
+  type        = bool
+  default     = false
+  description = "Set to false to prevent the module from creating or accessing any resources."
+}
+
+variable "account_id" {
+  type        = string
+  default     = ""
+  description = "Account ID of acceptor account"
 }
