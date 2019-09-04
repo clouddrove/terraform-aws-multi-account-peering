@@ -97,8 +97,8 @@ Here are some examples of how you can use this module in your inventory structur
         account_peering  = true
         accepter_region  = "eu-west-1"
         account_id       = "946079253026"
-        requestor_vpc_id = "vpc-0a34e67c9510d63f5"
-        acceptor_vpc_id  = "vpc-0c766fab50b176a43"
+        requestor_vpc_id = "vpc-XXXXXXXXXXXXXX"
+        acceptor_vpc_id  = "vpc-XXXXXXXXXXXXXX"
       }
 ```
 
@@ -106,34 +106,6 @@ Here are some examples of how you can use this module in your inventory structur
 
 
 
-
-## Inputs
-
-| Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| accepter_profile | Name of aws profile of acceptor vpc. | string | `` | no |
-| accepter_region | The region of acceptor vpc. | string | - | yes |
-| acceptor_allow_remote_vpc_dns_resolution | Allow acceptor VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the requestor VPC. | bool | `true` | no |
-| acceptor_vpc_id | Acceptor VPC ID. | string | - | yes |
-| account_id | Account ID of acceptor account | string | `` | no |
-| account_peering | Set to false to prevent the module from creating or accessing any resources. | bool | `false` | no |
-| application | Application (e.g. `cd` or `clouddrove`). | string | `` | no |
-| environment | Environment (e.g. `prod`, `dev`, `staging`). | string | `` | no |
-| label_order | Label order, e.g. `name`,`application`. | list | `<list>` | no |
-| multi_peering | Set to false to prevent the module from creating or accessing any resources. | bool | `false` | no |
-| name | Name  (e.g. `app` or `cluster`). | string | `` | no |
-| requestor_allow_remote_vpc_dns_resolution | Allow requestor VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the acceptor VPC. | bool | `true` | no |
-| requestor_vpc_id | Requestor VPC ID. | string | - | yes |
-| tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | map(string) | `<map>` | no |
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| accept_status | The status of the VPC peering connection request. |
-| account_accept_status | The status of the VPC peering connection request. |
-| connection_id | VPC peering connection ID. |
-| tags | A mapping of tags to assign to the resource. |
 
 
 

@@ -59,7 +59,7 @@ usage : |-
           account_peering  = true
           accepter_region  = "eu-west-1"
           account_id       = "946079253026"
-          requestor_vpc_id = "vpc-0a34e67c9510d63f5"
-          acceptor_vpc_id  = "vpc-0c766fab50b176a43"
+          requestor_vpc_id = "vpc-XXXXXXXXXXXXXX"
+          acceptor_vpc_id  = "vpc-XXXXXXXXXXXXXX"
         }
   ```
