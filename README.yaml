@@ -5,7 +5,7 @@
 #
 
 # Name of this project
-name : Terraform AWS VPC Peering Terraform AWS Multi Account Peering
+name : Terraform AWS Multi Account Peering
 
 # License of this project
 license: "MIT"
@@ -45,5 +45,5 @@ usage : |-
           accepter_profile = "clouddrove-prod"
           requestor_vpc_id = "vpc-XXXXXXXXXXXXXX"
           acceptor_vpc_id  = "vpc-XXXXXXXXXXXXXX"
-      }
+         }
   ```
