@@ -70,42 +70,53 @@ This module has a few dependencies:
 **IMPORTANT:** Since the `master` branch used in `source` varies based on new modifications, we suggest that you use the release versions [here](https://github.com/terraform-aws-multi-account-peering/releases).
 
 
-Here are some examples of how you can use this module in your inventory structure:
-## With Profile Name
+### Simple Example
+Here are an example of how you can use this module in your inventory structure:
 ```hcl
   module "vpc-peering" {
         source = "git::https://github.com/clouddrove/terraform-aws-multi-account-peering.git"
-        name             = "vpc-peering"
-        application      = "clouddrove"
-        environment      = "test"
-        label_order      = ["environment", "name", "application"]
-        multi_peering    = true
-        accepter_region  = "eu-west-1"
-        accepter_profile = "clouddrove-prod"
-        requestor_vpc_id = "vpc-XXXXXXXXXXXXXX"
-        acceptor_vpc_id  = "vpc-XXXXXXXXXXXXXX"
+        name              = "vpc-peering"
+        application       = "clouddrove"
+        environment       = "test"
+        label_order       = ["environment", "name", "application"]
+        enable_peering    = true
+        accepter_role_arn = "arn:aws:iam::XXXXXXXXXXXX:role/assume-role"
+        accepter_region   = "eu-west-1"
+        requestor_vpc_id  = "vpc-XXXXXXXXXXXXXX"
+        acceptor_vpc_id   = "vpc-XXXXXXXXXXXXXX"
        }
 ```
-## With Account ID
-```hcl
- module "vpc-peering" {
-        source = "git::https://github.com/clouddrove/terraform-aws-multi-account-peering.git"
-        name             = "vpc-peering"
-        application      = "clouddrove"
-        environment      = "test"
-        label_order      = ["environment", "name", "application"]
-        account_peering  = true
-        accepter_region  = "eu-west-1"
-        account_id       = "946079253026"
-        requestor_vpc_id = "vpc-XXXXXXXXXXXXXX"
-        acceptor_vpc_id  = "vpc-XXXXXXXXXXXXXX"
-      }
-```
 
 
 
 
 
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| accepter_region | The region of acceptor vpc. | string | - | yes |
+| accepter_role_arn | The Role ARN of accepter AWS account. | string | `` | no |
+| acceptor_allow_remote_vpc_dns_resolution | Allow acceptor VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the requestor VPC. | bool | `true` | no |
+| acceptor_vpc_id | Acceptor VPC ID. | string | - | yes |
+| application | Application (e.g. `cd` or `clouddrove`). | string | `` | no |
+| enable_peering | Set to false to prevent the module from creating or accessing any resources. | bool | `false` | no |
+| environment | Environment (e.g. `prod`, `dev`, `staging`). | string | `` | no |
+| label_order | Label order, e.g. `name`,`application`. | list | `<list>` | no |
+| name | Name  (e.g. `app` or `cluster`). | string | `` | no |
+| profile_name | Name of aws profile | string | `` | no |
+| requestor_allow_remote_vpc_dns_resolution | Allow requestor VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the acceptor VPC. | bool | `true` | no |
+| requestor_vpc_id | Requestor VPC ID. | string | - | yes |
+| tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | map(string) | `<map>` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| accept_status | The status of the VPC peering connection request. |
+| connection_id | VPC peering connection ID. |
+| tags | A mapping of tags to assign to the resource. |
 
 
 

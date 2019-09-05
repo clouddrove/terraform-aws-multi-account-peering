@@ -15,11 +15,16 @@ module "labels" {
   label_order = var.label_order
 }
 
-#Accepter's Credentials
+#Accepter is AwS Details
 provider "aws" {
   alias   = "accepter"
   region  = var.accepter_region
-  profile = var.accepter_profile
+  version = ">= 1.25"
+  profile = var.profile_name
+
+  assume_role {
+    role_arn = var.accepter_role_arn
+  }
 }
 
 data "aws_caller_identity" "peer" {
@@ -34,7 +39,7 @@ data "aws_region" "peer" {
 #Module      : VPC PEERING CONNECTION
 #Description : Terraform module to connect two VPC's on AWS.
 resource "aws_vpc_peering_connection" "default" {
-  count         = var.multi_peering == true ? 1 : 0
+  count         = var.enable_peering == true ? 1 : 0
   peer_owner_id = data.aws_caller_identity.peer.account_id
   peer_region   = data.aws_region.peer.id
   vpc_id        = var.requestor_vpc_id
@@ -51,7 +56,7 @@ resource "aws_vpc_peering_connection" "default" {
 #Module      : VPC PEERING CONNECTION ACCEPTOR
 #Description : Provides a resource to manage the accepter's side of a VPC Peering Connection.
 resource "aws_vpc_peering_connection_accepter" "peer" {
-  count                     = var.multi_peering == true ? 1 : 0
+  count                     = var.enable_peering == true ? 1 : 0
   provider                  = "aws.accepter"
   vpc_peering_connection_id = aws_vpc_peering_connection.default[0].id
   auto_accept               = true
@@ -61,14 +66,14 @@ resource "aws_vpc_peering_connection_accepter" "peer" {
 #Module      : AWS VPC
 #Description : Provides a VPC resource.
 data "aws_vpc" "requestor" {
-  count = var.multi_peering == true ? 1 : 0
+  count = var.enable_peering == true ? 1 : 0
   id    = var.requestor_vpc_id
 }
 
 #Module      : ROUTE TABLE
 #Description : Provides a resource to create a VPC routing table.
 data "aws_route_table" "requestor" {
-  count = var.multi_peering == true ? length(distinct(sort(data.aws_subnet_ids.requestor[0].ids))) : 0
+  count = var.enable_peering == true ? length(distinct(sort(data.aws_subnet_ids.requestor[0].ids))) : 0
 
   subnet_id = element(
     distinct(sort(data.aws_subnet_ids.requestor[0].ids)),
@@ -79,7 +84,7 @@ data "aws_route_table" "requestor" {
 #Module      : SUBNET ID's
 #Description : Lookup requestor subnets.
 data "aws_subnet_ids" "requestor" {
-  count = var.multi_peering == true ? 1 : 0
+  count = var.enable_peering == true ? 1 : 0
 
   vpc_id = data.aws_vpc.requestor[0].id
 }
@@ -88,7 +93,7 @@ data "aws_subnet_ids" "requestor" {
 #Description : Lookup acceptor VPC so that we can reference the CIDR.
 data "aws_vpc" "acceptor" {
   provider = "aws.accepter"
-  count    = var.multi_peering == true ? 1 : 0
+  count    = var.enable_peering == true ? 1 : 0
   id       = var.acceptor_vpc_id
 }
 
@@ -96,7 +101,7 @@ data "aws_vpc" "acceptor" {
 #Description : Lookup acceptor subnets.
 data "aws_subnet_ids" "acceptor" {
   provider = "aws.accepter"
-  count    = var.multi_peering == true ? 1 : 0
+  count    = var.enable_peering == true ? 1 : 0
   vpc_id   = data.aws_vpc.acceptor[0].id
 }
 
@@ -104,7 +109,7 @@ data "aws_subnet_ids" "acceptor" {
 #Description : Lookup acceptor route tables.
 data "aws_route_table" "acceptor" {
   provider = "aws.accepter"
-  count    = var.multi_peering == true ? length(distinct(sort(data.aws_subnet_ids.acceptor[0].ids))) : 0
+  count    = var.enable_peering == true ? length(distinct(sort(data.aws_subnet_ids.acceptor[0].ids))) : 0
 
   subnet_id = element(
     distinct(sort(data.aws_subnet_ids.acceptor[0].ids)),
@@ -116,7 +121,7 @@ data "aws_route_table" "acceptor" {
 #Description : Create routes from requestor to acceptor.
 resource "aws_route" "requestor" {
 
-  count = var.multi_peering == true ? length(
+  count = var.enable_peering == true ? length(
     distinct(sort(data.aws_route_table.requestor.*.route_table_id))
   ) * length(data.aws_vpc.acceptor[0].cidr_block_associations) : 0
 
@@ -140,7 +145,7 @@ resource "aws_route" "requestor" {
 resource "aws_route" "acceptor" {
   provider = "aws.accepter"
 
-  count = var.multi_peering == true ? length(
+  count = var.enable_peering == true ? length(
     distinct(sort(data.aws_route_table.acceptor.*.route_table_id))
   ) * length(data.aws_vpc.requestor[0].cidr_block_associations) : 0
 
@@ -157,21 +162,4 @@ resource "aws_route" "acceptor" {
     data.aws_route_table.acceptor,
     aws_vpc_peering_connection.default,
   ]
-}
-
-#Module      : VPC PEERING CONNECTION
-#Description : Terraform module to connect two VPC's on AWS With Account ID.
-resource "aws_vpc_peering_connection" "account" {
-  count         = var.account_peering == true ? 1 : 0
-  peer_owner_id = var.account_id
-  peer_region   = data.aws_region.peer.id
-  vpc_id        = var.requestor_vpc_id
-  peer_vpc_id   = var.acceptor_vpc_id
-  auto_accept   = false
-  tags = merge(
-    module.labels.tags,
-    {
-      "Name" = format("%s-%s", module.labels.application, module.labels.environment)
-    }
-  )
 }
