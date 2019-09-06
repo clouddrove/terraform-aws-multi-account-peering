@@ -105,7 +105,7 @@ Here are an example of how you can use this module in your inventory structure:
 | environment | Environment (e.g. `prod`, `dev`, `staging`). | string | `` | no |
 | label_order | Label order, e.g. `name`,`application`. | list | `<list>` | no |
 | name | Name  (e.g. `app` or `cluster`). | string | `` | no |
-| profile_name | Name of aws profile | string | `` | no |
+| profile_name | Name of aws profile. | string | `` | no |
 | requestor_allow_remote_vpc_dns_resolution | Allow requestor VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the acceptor VPC. | bool | `true` | no |
 | requestor_vpc_id | Requestor VPC ID. | string | - | yes |
 | tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | map(string) | `<map>` | no |
