@@ -72,6 +72,6 @@ variable "accepter_role_arn" {
 }
 variable "profile_name" {
   type        = string
-  default     = null
+  default     = ""
   description = "Name of aws profile"
 }

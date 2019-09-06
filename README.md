@@ -74,7 +74,7 @@ This module has a few dependencies:
 Here are an example of how you can use this module in your inventory structure:
 ```hcl
   module "vpc-peering" {
-        source = "git::https://github.com/clouddrove/terraform-aws-multi-account-peering.git"
+        source            = "git::https://github.com/clouddrove/terraform-aws-multi-account-peering.git"
         name              = "vpc-peering"
         application       = "clouddrove"
         environment       = "test"
