@@ -11,7 +11,7 @@ name : Terraform AWS Multi Account Peering
 license: "MIT"
 
 # Canonical GitHub repo
-github_repo: terraform-aws-multi-account-peering
+github_repo: clouddrove/terraform-aws-multi-account-peering
 
 # Badges to display
 badges:
