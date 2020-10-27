@@ -36,7 +36,8 @@ usage : |-
   Here are an example of how you can use this module in your inventory structure:
   ```hcl
     module "vpc-peering" {
-          source            = "git::https://github.com/clouddrove/terraform-aws-multi-account-peering.git?ref=tags/0.13.0"
+          source            = "clouddrove/multi-account-peering/aws"
+          version           = "0.13.0"
           name              = "vpc-peering"
           application       = "clouddrove"
           environment       = "test"
