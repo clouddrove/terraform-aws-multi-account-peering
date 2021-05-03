@@ -48,7 +48,7 @@ resource "aws_vpc_peering_connection" "default" {
   tags = merge(
     module.labels.tags,
     {
-      "Name" = format("%s-%s", module.labels.application, module.labels.environment)
+      "Name" = module.labels.id
     }
   )
 }
