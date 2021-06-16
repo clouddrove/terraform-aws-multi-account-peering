@@ -7,11 +7,14 @@
 #              tags for resources. You can use terraform-labels to implement a strict
 #              naming convention.
 module "labels" {
-  source = "git::https://github.com/clouddrove/terraform-labels.git?ref=tags/0.13.0"
+  source  = "clouddrove/labels/aws"
+  version = "0.15.0"
 
   name        = var.name
-  application = var.application
   environment = var.environment
+  attributes  = var.attributes
+  repository  = var.repository
+  managedby   = var.managedby
   label_order = var.label_order
 }
 
@@ -19,7 +22,7 @@ module "labels" {
 provider "aws" {
   alias   = "accepter"
   region  = var.accepter_region
-  version = ">= 1.25"
+  version = ">= 3.1.15"
   profile = var.profile_name
 
   assume_role {
@@ -48,7 +51,7 @@ resource "aws_vpc_peering_connection" "default" {
   tags = merge(
     module.labels.tags,
     {
-      "Name" = format("%s-%s", module.labels.application, module.labels.environment)
+      "Name" = format("%s-%s", module.labels.name, module.labels.environment)
     }
   )
 }
