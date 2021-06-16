@@ -16,7 +16,7 @@ github_repo: clouddrove/terraform-aws-multi-account-peering
 # Badges to display
 badges:
   - name: "Terraform"
-    image: "https://img.shields.io/badge/Terraform-v0.13-green"
+    image: "https://img.shields.io/badge/Terraform-v0.15-green"
     url: "https://www.terraform.io"
   - name: "Licence"
     image: "https://img.shields.io/badge/License-MIT-blue.svg"
@@ -37,11 +37,10 @@ usage : |-
   ```hcl
     module "vpc-peering" {
           source            = "clouddrove/multi-account-peering/aws"
-          version           = "0.13.0"
+          version           = "0.15.0"
           name              = "vpc-peering"
-          application       = "clouddrove"
           environment       = "test"
-          label_order       = ["environment", "name", "application"]
+          label_order       = ["environment", "name",]
           enable_peering    = true
           accepter_role_arn = "arn:aws:iam::XXXXXXXXXXXX:role/assume-role"
           accepter_region   = "eu-west-1"
