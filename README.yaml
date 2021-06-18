@@ -40,7 +40,7 @@ usage : |-
           version           = "0.15.0"
           name              = "vpc-peering"
           environment       = "test"
-          label_order       = ["environment", "name",]
+          label_order       = ["environment", "name"]
           enable_peering    = true
           accepter_role_arn = "arn:aws:iam::XXXXXXXXXXXX:role/assume-role"
           accepter_region   = "eu-west-1"
