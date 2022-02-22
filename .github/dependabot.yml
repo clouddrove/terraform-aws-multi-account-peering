@@ -6,11 +6,11 @@
 version: 2
 updates:
 - package-ecosystem: "terraform"
-  directory: "/"
+  directory: "/example"
   schedule:
     interval: "daily"
   open-pull-requests-limit: 3
   assignees:
   - "sohanyadav"
   reviewers:
-  - "sohanyadav"
+  - "anmolnagpal"
