@@ -2,15 +2,13 @@
 # package ecosystems to update and where the package manifests are located.
 # Please see the documentation for all configuration options:
 # https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
-
 version: 2
 updates:
-- package-ecosystem: "terraform"
-  directory: "/"
-  schedule:
-    interval: "daily"
-  open-pull-requests-limit: 3
-  assignees:
-  - "sohanyadav"
-  reviewers:
-  - "anmolnagpal"
+  - package-ecosystem: "terraform" # See documentation for possible values
+    directory: "/" # Location of package manifests
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "terraform" # See documentation for possible values
+    directory: "_example/" # Location of package manifests
+    schedule:
+      interval: "weekly"
