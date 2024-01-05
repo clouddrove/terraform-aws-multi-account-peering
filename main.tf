@@ -76,20 +76,19 @@ data "aws_vpc" "requestor" {
 #Module      : ROUTE TABLE
 #Description : Provides a resource to create a VPC routing table.
 data "aws_route_table" "requestor" {
-  count = var.enable_peering == true ? length(distinct(sort(data.aws_subnet_ids.requestor[0].ids))) : 0
+  count = var.enable_peering == true ? length(distinct(sort(data.aws_subnets.requestor[0].ids))) : 0
 
   subnet_id = element(
-    distinct(sort(data.aws_subnet_ids.requestor[0].ids)),
+    distinct(sort(data.aws_subnets.requestor[0].ids)),
     count.index
   )
 }
 
 #Module      : SUBNET ID's
 #Description : Lookup requestor subnets.
-data "aws_subnet_ids" "requestor" {
+data "aws_subnets" "requestor" {
   count = var.enable_peering == true ? 1 : 0
 
-  vpc_id = data.aws_vpc.requestor[0].id
 }
 
 #Module      : VPC ACCEPTOR
@@ -102,20 +101,19 @@ data "aws_vpc" "acceptor" {
 
 #Module      : SUBNET ID's ACCEPTOR
 #Description : Lookup acceptor subnets.
-data "aws_subnet_ids" "acceptor" {
+data "aws_subnets" "acceptor" {
   provider = "aws.accepter"
   count    = var.enable_peering == true ? 1 : 0
-  vpc_id   = data.aws_vpc.acceptor[0].id
 }
 
 #Module      : ROUTE TABLE
 #Description : Lookup acceptor route tables.
 data "aws_route_table" "acceptor" {
   provider = "aws.accepter"
-  count    = var.enable_peering == true ? length(distinct(sort(data.aws_subnet_ids.acceptor[0].ids))) : 0
+  count    = var.enable_peering == true ? length(distinct(sort(data.aws_subnets.acceptor[0].ids))) : 0
 
   subnet_id = element(
-    distinct(sort(data.aws_subnet_ids.acceptor[0].ids)),
+    distinct(sort(data.aws_subnets.acceptor[0].ids)),
     count.index
   )
 }
