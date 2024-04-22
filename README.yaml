@@ -5,52 +5,82 @@
 #
 
 # Name of this project
-name : Terraform AWS Multi Account Peering
+name: Terraform AWS AMPLIFY
 
 # License of this project
 license: "APACHE"
 
 # Canonical GitHub repo
-github_repo: clouddrove/terraform-aws-multi-account-peering
+github_repo: clouddrove/terraform-aws-amplify
 
 # Badges to display
 badges:
-  - name: "Terraform"
-    image: "https://img.shields.io/badge/Terraform-v1.1.7-green"
-    url: "https://www.terraform.io"
+  - name: "Latest Release"
+    image: "https://img.shields.io/github/release/clouddrove//terraform-aws-amplify.svg"
+    url: "https://github.com/clouddrove//terraform-aws-amplify/releases/latest"
+  - name: "tfsec"
+    image: "https://github.com/clouddrove/terraform-aws-amplify/actions/workflows/tfsec.yml/badge.svg"
+    url: "https://github.com/clouddrove/terraform-aws-amplify/actions/workflows/tfsec.yml"
   - name: "Licence"
     image: "https://img.shields.io/badge/License-APACHE-blue.svg"
     url: "LICENSE.md"
-  - name: "tfsec"
-    image: "https://github.com/clouddrove/terraform-aws-multi-account-peering/actions/workflows/tfsec.yml/badge.svg"
-    url: "https://github.com/clouddrove/terraform-aws-multi-account-peering/actions/workflows/tfsec.yml"
-  - name: "static-checks"
-    image: "https://github.com/clouddrove/terraform-aws-multi-account-peering/actions/workflows/terraform.yml/badge.svg"
-    url: "https://github.com/clouddrove/terraform-aws-multi-account-peering/actions/workflows/terraform.yml"
+  - name: "Changelog"
+    image: "https://img.shields.io/badge/Changelog-blue"
+    url: "CHANGELOG.md"
 
+prerequesties:
+  - name: Terraform
+    url: https://learn.hashicorp.com/terraform/getting-started/install.html
+    version: ">= 1.6.6"
+
+providers:
+  - name: aws
+    url: https://aws.amazon.com/
+    version: "~> 5.46.0"
+
+module_dependencies:
+  - name: Labels Module
+    url: https://github.com/clouddrove/terraform-aws-labels
+    description: Provides resource tagging.
 #  description of this project
+# yamllint disable rule:line-length
 description: |-
-  Terraform module to connect two VPC’s from different AWS account.
-
-# extra content
-include:
-  - "terraform.md"
+  Terraform module to provision AWS Amplify apps, backend environments, branches, domain associations, and webhooks.
 
 # How to use this project
-usage : |-
+# yamllint disable rule:line-length
+usage: |-
   ### Simple Example
-  Here are an example of how you can use this module in your inventory structure:
-  ```hcl
-    module "vpc-peering" {
-          source            = "clouddrove/multi-account-peering/aws"
-          version           = "1.0.1"
-          name              = "vpc-peering"
-          environment       = "test"
-          label_order       = ["environment", "name"]
-          enable_peering    = true
-          accepter_role_arn = "arn:aws:iam::XXXXXXXXXXXX:role/assume-role"
-          accepter_region   = "eu-west-1"
-          requestor_vpc_id  = "vpc-XXXXXXXXXXXXXX"
-          acceptor_vpc_id   = "vpc-XXXXXXXXXXXXXX"
-         }
-  ```
+  Here is an example of how you can use this module in your inventory structure:
+    ```hcl
+    module "amplify" {
+     source = "../"
+     name        = "amplify"
+     environment = "test"
+     label_order = ["name", "environment"]
+     amplify_enabled        = true
+     environment_name       = "prod"
+     domain_name            = ["newloop.eu", "newloop.dk"]
+     amplify_repository     =  "https://github.com/clouddrove-sandbox/terraform-aws-amplify"
+     access_token           = "ghxxxxxm06Sd3KqkafBVu0xzcxcxcv0EA8AK"
+     amplify_branch_name    = "main"
+     sub_domain_prefix_name = "scan"
+     deployment_artifacts   = "app-example-deployment"
+     stack_name             = "amplify-app-example"
+     branch_framework       = "React"
+     branch_stage           = "PRODUCTION"
+     branch_environment_variables = {
+     ENV = "test"
+     }
+     amplify_app_environment_variables = {
+     REACT_APP_API_SERVER = ""
+     }
+     custom_rules = [
+     {
+     source = "/01/<p01>/21/<p21>"
+     status = "302"
+     target = "/?p01=<p01>&p21=<p21> "
+     }
+     ]
+    }
+    ```
