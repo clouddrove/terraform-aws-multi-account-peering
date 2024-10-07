@@ -25,4 +25,3 @@
 | accept\_status | The status of the VPC peering connection request. |
 | connection\_id | VPC peering connection ID. |
 | tags | A mapping of tags to assign to the resource. |
-
