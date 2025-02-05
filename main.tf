@@ -77,11 +77,6 @@ data "aws_vpc" "requestor" {
 data "aws_route_table" "requestor" {
   count  = var.enable_peering == true ? length(distinct(sort(data.aws_subnets.requestor[0].ids))) : 0
   vpc_id = var.requestor_vpc_id
-  # subnet_id = element(
-  #   distinct(sort(data.aws_subnets.requestor[0].ids)),
-  #   count.index
-  # )
-
   depends_on = [
     aws_vpc_peering_connection.default,
     data.aws_vpc.requestor
@@ -156,7 +151,7 @@ resource "aws_route" "requestor" {
 #Description : Create routes from acceptor to requestor.
 resource "aws_route" "acceptor" {
   provider = aws.accepter
-  count = var.enable_peering == true ? length(data.aws_vpc.requestor[0].cidr_block_associations) : 0
+  count    = var.enable_peering == true ? length(data.aws_vpc.requestor[0].cidr_block_associations) : 0
 
   route_table_id = element(
     distinct(sort(data.aws_route_table.acceptor.*.route_table_id)),
