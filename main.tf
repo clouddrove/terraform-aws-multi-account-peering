@@ -16,6 +16,7 @@ module "labels" {
   repository  = var.repository
   managedby   = var.managedby
   label_order = var.label_order
+  extra_tags  = var.tags
 }
 
 #Accepter is AwS Details
