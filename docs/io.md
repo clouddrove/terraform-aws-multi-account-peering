@@ -9,8 +9,9 @@
 | attributes | Additional attributes (e.g. `1`). | `list(any)` | `[]` | no |
 | enable\_peering | Set to false to prevent the module from creating or accessing any resources. | `bool` | `false` | no |
 | environment | Environment (e.g. `prod`, `dev`, `staging`). | `string` | `""` | no |
+| extra\_tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | `map(string)` | `{}` | no |
 | label\_order | Label order, e.g. `name`,`application`. | `list(any)` | `[]` | no |
-| managedby | ManagedBy, eg 'CloudDrove' | `string` | `"hello@clouddrove.com"` | no |
+| managedby | ManagedBy, eg 'CloudDrove' or 'AnmolNagpal' | `string` | `"hello@clouddrove.com"` | no |
 | name | Name  (e.g. `app` or `cluster`). | `string` | `""` | no |
 | profile\_name | Name of aws profile. | `string` | `null` | no |
 | repository | Terraform current module repo | `string` | `"https://github.com/clouddrove/terraform-aws-multi-account-peering"` | no |
